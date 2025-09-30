@@ -1,28 +1,28 @@
 import { Component } from '@angular/core';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',  // 👈 SEM standalone
-  styleUrls: ['./login.component.scss']   // opcional
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  email = '';
-  senha = '';
+  email: string = '';
+  senha: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin() {
-    if (this.authService.login(this.email, this.senha)) {
-      const perfil = this.authService.getPerfilUsuario();
-      if (perfil === 'corretor') {
-        this.router.navigate(['/corretor/dashboard']);
-      } else if (perfil === 'cliente') {
-        this.router.navigate(['/cliente/meus-interesses']);
+    // Chama o serviço de autenticação
+    this.authService.login(this.email, this.senha).subscribe((isAuthenticated) => {
+      if (isAuthenticated) {
+        alert('Bem-vindo!');
+        // Redireciona para a página principal ou dashboard
+        this.router.navigate(['/dashboard']);
+      } else {
+        alert('Email ou senha inválidos!');
       }
-    } else {
-      alert('Login inválido!');
-    }
+    });
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subscribable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private usuarioLogado: any = null;
   private apiUrl = 'http://localhost:3000/usuarios';  // URL do json-server
+  currentUser$!: Observable<unknown> | Subscribable<unknown> | Promise<unknown>;
 
   constructor(private http: HttpClient) {}
 
@@ -45,7 +46,12 @@ export class AuthService {
 
   // Função para obter o perfil do usuário (tipo)
   getPerfilUsuario(): string {
-    return this.isAuthenticated() ? this.usuarioLogado.tipo : '';
+    const user = localStorage.getItem('usuario');
+    if (user) {
+      const usuario = JSON.parse(user);
+      return usuario.tipo || '';
+    }
+    return '';
   }
 
   // Função para cadastrar um novo cliente

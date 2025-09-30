@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ImoveisService {
   private apiUrl = 'http://localhost:3000/imoveis'; // JSON Server
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getImoveis(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
@@ -19,8 +19,12 @@ export class ImoveisService {
   }
 
   createImovel(imovel: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, imovel);
-  }
+    return this.http.post<any>(this.apiUrl, {
+      ...imovel,
+      id: Number(imovel.id) || undefined, // Remove o ID se for novo
+      corretorId: Number(imovel.corretorId),
+    });
+  } 
 
   updateImovel(id: number, imovel: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${id}`, imovel);

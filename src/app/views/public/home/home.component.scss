@@ -26,6 +26,9 @@
 }
 
 .imoveis-destaque {
+  display: flex;
+  margin: 10px 20px;
+
   .card {
     border-radius: 12px;
     overflow: hidden;

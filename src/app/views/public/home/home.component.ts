@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ImoveisService } from '../../../core/services/imoveis.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service'; // 👈 importe o serviço
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,12 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
   imoveisDestaque: any[] = [];
 
-  constructor(private imoveisService: ImoveisService, private router: Router) {}
+  // Tornamos o authService PÚBLICO para usar no template com async pipe
+  constructor(
+    private imoveisService: ImoveisService,
+    private router: Router,
+    public authService: AuthService // 👈 público!
+  ) {}
 
   ngOnInit(): void {
     this.carregarImoveisDestaque();
@@ -30,12 +36,11 @@ export class HomeComponent implements OnInit {
 
   navegarParaDetalhes(id: number) {
     console.log('Navegar para detalhes do imóvel ID:', id);
-    // this.router.navigate(['/imovel', id]); // descomente quando criar a rota
+    // this.router.navigate(['/imovel', id]);
   }
 
   registrarInteresse(id: number) {
     console.log('Registrar interesse no imóvel ID:', id);
     alert(`Interesse registrado no imóvel ${id}`);
-    // Aqui você chamaria o serviço depois
   }
 }

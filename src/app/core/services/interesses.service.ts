@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class InteresseService {
   private apiUrl = 'http://localhost:3000/interesses';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   registrarInteresse(clienteId: number, imovelId: number): Observable<any> {
     return this.http.post(this.apiUrl, { clienteId, imovelId });
@@ -16,5 +16,13 @@ export class InteresseService {
 
   getInteressesPorCliente(clienteId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}?clienteId=${clienteId}`);
+  }
+
+  removerInteressePorImovel(clienteId: number, imovelId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}?clienteId=${clienteId}&imovelId=${imovelId}`);
+  }
+
+  deletarInteressePorId(interesseId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${interesseId}`);
   }
 }
