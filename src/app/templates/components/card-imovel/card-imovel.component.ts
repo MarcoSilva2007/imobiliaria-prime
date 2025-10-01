@@ -26,6 +26,7 @@ export class CardImovelComponent implements OnInit {
   deveMostrarBotaoInteresse: boolean = false;
   jaTemInteresse: boolean = false;
   carregandoInteresse: boolean = false;
+imoveis: any;
 
   constructor(
     private authService: AuthService,

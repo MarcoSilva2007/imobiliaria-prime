@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TrackByFunction } from '@angular/core';
 import { ImoveisService } from '../../../core/services/imoveis.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service'; // 👈 importe o serviço
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -9,34 +9,37 @@ import { AuthService } from '../../../core/services/auth.service'; // 👈 impor
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  imoveisDestaque: any[] = [];
+  imoveis: any[] = [];
+  carregando = true;
+  erroCarregar = false;
+trackById: TrackByFunction<any> | undefined;
 
-  // Tornamos o authService PÚBLICO para usar no template com async pipe
   constructor(
     private imoveisService: ImoveisService,
     private router: Router,
-    public authService: AuthService // 👈 público!
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.carregarImoveisDestaque();
+    this.carregarImoveis();
   }
 
-  carregarImoveisDestaque() {
+  carregarImoveis() {
     this.imoveisService.getImoveis().subscribe({
       next: (data) => {
-        this.imoveisDestaque = data.slice(0, 3);
+        this.imoveis = data;
+        this.carregando = false;
       },
       error: (err) => {
         console.error('Erro ao carregar imóveis:', err);
-        this.imoveisDestaque = [];
+        this.erroCarregar = true;
+        this.carregando = false;
       },
     });
   }
 
-  navegarParaDetalhes(id: number) {
-    console.log('Navegar para detalhes do imóvel ID:', id);
-    // this.router.navigate(['/imovel', id]);
+  verDetalhes(id: number) {
+    this.router.navigate(['/imovel', id]);
   }
 
   registrarInteresse(id: number) {
